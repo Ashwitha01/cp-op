@@ -1,0 +1,120 @@
+apiVersion: yobitel.org/v1alpha1
+kind: CouchdbService
+metadata:
+  name: example-couchdbservice
+spec:
+  # Default values copied from <project_dir>/helm-charts/couchdb/values.yaml
+  
+  adminUsername: admin
+  affinity: null
+  allowAdminParty: false
+  backup:
+    annotations:
+      iam.amazonaws.com/role: couchdb
+    componentName: backup
+    destination: s3://couchdb-data/backup
+    enabled: true
+    env:
+    - name: AWS_REGION
+      value: us-east-1
+    existingSecret: {}
+    extraArgs: []
+    image:
+      repository: maorfr/kube-tasks
+      tag: 0.2.0
+    resources:
+      limits:
+        cpu: 1
+        memory: 1Gi
+      requests:
+        cpu: 1
+        memory: 1Gi
+    schedule: '*/5 * * * *'
+  checkDeprecation: true
+  clusterSize: 3
+  couchdbConfig:
+    chttpd:
+      bind_address: any
+      require_valid_user: false
+  createAdminSecret: true
+  dns:
+    clusterDomainSuffix: cluster.local
+  enableSearch: false
+  erlangFlags:
+    name: couchdb
+    setcookie: monster
+  hpa:
+    enabled: true
+  image:
+    pullPolicy: IfNotPresent
+    repository: couchdb
+    tag: 2.3.1
+  ingress:
+    annotations: null
+    enabled: false
+    hosts:
+    - chart-example.local
+    tls: null
+  initImage:
+    pullPolicy: Always
+    repository: busybox
+    tag: latest
+  livenessProbe:
+    enabled: true
+    failureThreshold: 3
+    initialDelaySeconds: 0
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 1
+  namespace: couchdb
+  networkPolicy:
+    enabled: true
+  persistentVolume:
+    accessModes:
+    - ReadWriteOnce
+    enabled: true
+    namespace: couchdb
+    size: 30Gi
+    storageClass: gp2
+  podDisruptionBudget:
+    maxUnavailable: 1
+  podDisruptionBudgetEnabled: true
+  podManagementPolicy: Parallel
+  prometheus:
+    monitor:
+      additionalLabels: {}
+      enabled: true
+      namespace: ""
+  readinessProbe:
+    enabled: true
+    failureThreshold: 3
+    initialDelaySeconds: 0
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 1
+  resources:
+    limits:
+      cpu: 56
+      memory: 256Gi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+  searchImage:
+    pullPolicy: IfNotPresent
+    repository: kocolosk/couchdb-search
+    tag: 0.1.2
+  securityContext:
+    enabled: true
+    runAsUser: 1000
+  service:
+    enabled: true
+    externalPort: 5984
+    type: ClusterIP
+  sidecars:
+    configAutoReload:
+      enabled: true
+      folder: /var/couchdb/casc_configs
+      image: kiwigrid/k8s-sidecar:0.1.20
+      imagePullPolicy: IfNotPresent
+      resources: {}
+  

@@ -1,0 +1,9 @@
+apiVersion: v1
+appVersion: 1.0
+deprecated: true
+description: DEPRECATED A database featuring seamless multi-master sync, that scales
+  from big data to mobile, with an intuitive HTTP/JSON API and designed for reliability.
+home: https://couchdb.apache.org/
+icon: http://couchdb.apache.org/CouchDB-visual-identity/logo/CouchDB-couch-symbol.svg
+name: couchdb
+version: 3.0
